@@ -1,10 +1,10 @@
-#include "exported/Window.hpp"
-
 #ifdef WIN32
 #	include <SDL.h>
 #else
 #	include <SDL2/SDL.h>
 #endif
+
+#include "exported/Window.hpp"
 
 namespace csaru {
 namespace xapp {
@@ -12,6 +12,11 @@ namespace xapp {
 //======================================================================
 Window::~Window () {
 	Destroy();
+}
+
+//======================================================================
+void Window::Clear () {
+	SDL_RenderClear(m_renderer);
 }
 
 //======================================================================
@@ -63,6 +68,11 @@ bool Window::Init (const char * title, uint32_t width, uint32_t height) {
 	m_areaWidth  = width;
 	m_areaHeight = height;
 	return true;
+}
+
+//======================================================================
+void Window::Render () {
+	SDL_RenderPresent(m_renderer);
 }
 
 } // namespace xapp

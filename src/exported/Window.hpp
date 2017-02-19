@@ -22,6 +22,12 @@ public:
 	bool Init (const char * title, uint32_t width, uint32_t height);
 	void Destroy ();
 
+	void SendQuit ();
+	void Clear ();
+	void Render ();
+
+	bool IsAlive ()            { return m_window != nullptr; }
+
 	operator SDL_Window * ()   { return m_window; }
 	operator SDL_Renderer * () { return m_renderer; }
 };
