@@ -1,0 +1,17 @@
+*~
+*.swp
+Session.vim
+__pycache__
+
+docs
+
+Debug
+Release
+*vcxproj*.user
+
+*.d
+*.o
+*.a
+
+src/tags
+
