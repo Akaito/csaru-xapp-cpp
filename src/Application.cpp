@@ -58,14 +58,22 @@ bool Application::Init () {
 void Application::PollEvents () {
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_QUIT || e.type == SDL_APP_TERMINATING) {
-			m_isQuitting = true;
-			break;
-		}
-		else if (e.type == SDL_WINDOWEVENT) {
-			HandleWindowEvent(e);
-		}
-	}
+		switch (e.type) {
+			case SDL_QUIT:
+			case SDL_APP_TERMINATING:
+				m_isQuitting = true;
+				break;
+			case SDL_WINDOWEVENT:
+				HandleWindowEvent(e);
+				break;
+			case SDL_KEYDOWN:
+				switch (e.key.keysym.sym) {
+					// hacky quick quit key while testing
+					case SDLK_ESCAPE: m_isQuitting = true; break;
+				} // end keydown keysym switch
+				break;
+		} // end event type switch
+	} // end event loop
 }
 
 } // namespace xapp

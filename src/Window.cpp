@@ -20,6 +20,11 @@ void Window::Clear () {
 }
 
 //======================================================================
+void Window::DebugPrint (const char * message) {
+	SDL_Log(message);
+}
+
+//======================================================================
 void Window::Destroy () {
 	if (m_renderer)
 		SDL_DestroyRenderer(m_renderer);

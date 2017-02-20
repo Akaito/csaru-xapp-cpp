@@ -28,6 +28,8 @@ public:
 	void Clear ();
 	void Render ();
 
+	void DebugPrint (const char * message);
+
 	bool IsAlive ()               { return m_window != nullptr; }
 
 	SDL_Window * SdlWindow ()     { return m_window; }
