@@ -20,7 +20,7 @@ private:
 public:
 	virtual ~Application ();
 
-	bool Init ();
+	bool Init (int argc, const char * const * argv);
 	void Close ();
 
 	void PollEvents ();
