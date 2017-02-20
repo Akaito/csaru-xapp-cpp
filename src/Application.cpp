@@ -13,6 +13,7 @@
 #include <csaru-core-cpp/csaru-core-cpp.hpp> // unused()
 
 #include "exported/Application.hpp"
+#include "exported/SDL_RWopsPhysicsFS.hpp"
 #include "exported/Window.hpp"
 
 namespace csaru {
@@ -34,6 +35,11 @@ void Application::Close () {
 		window->Destroy();
 	}
 	m_windows.clear();
+
+	for (auto fontIter : m_fonts) {
+		TTF_CloseFont(fontIter.second);
+	}
+	m_fonts.clear();
 
 	if (!PHYSFS_deinit()) {
 		SDL_LogError(SDL_LOG_CATEGORY_ERROR, "PhysicsFS couldn't deinit properly.  Open files refusing to close?");
@@ -99,6 +105,26 @@ void Application::PollEvents () {
 				break;
 		} // end event type switch
 	} // end event loop
+}
+
+//======================================================================
+void Application::SetFont (const char * key, TTF_Font * font) {
+	// If setting to null, don't free the font.  Assume user is doing that.
+	if (!font) {
+		if (m_debugFont == m_fonts.at(key))
+			m_debugFont = nullptr;
+		m_fonts.erase(key);
+		return;
+	}
+
+	if (m_fonts.count(key) && m_debugFont == m_fonts.at(key))
+		m_debugFont = font;
+	m_fonts[key] = font;
+}
+
+//======================================================================
+void Application::SetDebugFont (const char * key) {
+	m_debugFont = m_fonts.at(key);
 }
 
 } // namespace xapp
