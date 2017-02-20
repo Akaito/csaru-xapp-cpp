@@ -2,9 +2,11 @@
 
 #include <stdint.h>
 
-// SDL forward declares
-struct SDL_Window;
-struct SDL_Renderer;
+#ifdef WIN32
+#	include <SDL.h>
+#else
+#	include <SDL2/SDL.h>
+#endif
 
 namespace csaru {
 namespace xapp {
@@ -22,14 +24,14 @@ public:
 	bool Init (const char * title, uint32_t width, uint32_t height);
 	void Destroy ();
 
-	void SendQuit ();
+	void HandleEvent (const SDL_Event & e);
 	void Clear ();
 	void Render ();
 
-	bool IsAlive ()            { return m_window != nullptr; }
+	bool IsAlive ()               { return m_window != nullptr; }
 
-	operator SDL_Window * ()   { return m_window; }
-	operator SDL_Renderer * () { return m_renderer; }
+	SDL_Window * SdlWindow ()     { return m_window; }
+	SDL_Renderer * SdlRenderer () { return m_renderer; }
 };
 
 } // namespace xapp

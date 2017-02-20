@@ -33,6 +33,18 @@ void Application::Close () {
 }
 
 //======================================================================
+void Application::HandleWindowEvent (const SDL_Event & e) {
+	for (auto && window : m_windows) {
+		uint32_t windowId = SDL_GetWindowID(window->SdlWindow());
+		if (windowId != e.window.windowID)
+			continue;
+		window->HandleEvent(e);
+		return;
+	}
+	//SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_WINDOWEVENT windowID {%u} unmatched in Application.", e.window.windowID);
+}
+
+//======================================================================
 bool Application::Init () {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		std::fprintf(stderr, "SDL failed to initialize.  %s\n", SDL_GetError());
@@ -49,6 +61,9 @@ void Application::PollEvents () {
 		if (e.type == SDL_QUIT || e.type == SDL_APP_TERMINATING) {
 			m_isQuitting = true;
 			break;
+		}
+		else if (e.type == SDL_WINDOWEVENT) {
+			HandleWindowEvent(e);
 		}
 	}
 }

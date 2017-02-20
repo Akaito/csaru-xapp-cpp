@@ -33,6 +33,16 @@ void Window::Destroy () {
 }
 
 //======================================================================
+void Window::HandleEvent (const SDL_Event & e) {
+	switch (e.window.event) {
+		case SDL_WINDOWEVENT_CLOSE: {
+			Destroy();
+			break;
+		}
+	}
+}
+
+//======================================================================
 bool Window::Init (const char * title, uint32_t width, uint32_t height) {
 	Destroy();
 

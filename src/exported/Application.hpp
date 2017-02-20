@@ -15,6 +15,8 @@ private:
 	std::vector<Window *> m_windows;
 	bool                  m_isQuitting = false;
 
+	void HandleWindowEvent (const SDL_Event & e);
+
 public:
 	virtual ~Application ();
 
