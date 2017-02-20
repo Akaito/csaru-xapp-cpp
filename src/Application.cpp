@@ -2,8 +2,10 @@
 
 #ifdef WIN32
 #	include <SDL.h>
+#	include <SDL_ttf.h>
 #else
 #	include <SDL2/SDL.h>
+#	include <SDL2/SDL_ttf.h>
 #endif
 
 #include "exported/Application.hpp"
@@ -48,6 +50,12 @@ void Application::HandleWindowEvent (const SDL_Event & e) {
 bool Application::Init () {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		std::fprintf(stderr, "SDL failed to initialize.  %s\n", SDL_GetError());
+		return false;
+	}
+
+	// SDL_ttf
+	if (TTF_Init() == -1) {
+		SDL_LogError(SDL_LOG_CATEGORY_ERROR, "SDL_ttf failed to initialize.  %s\n", TTF_GetError());
 		return false;
 	}
 

@@ -1,9 +1,10 @@
 #ifdef WIN32
-#	include <SDL.h>
+#	include <SDL_ttf.h>
 #else
-#	include <SDL2/SDL.h>
+#	include <SDL2/SDL_ttf.h>
 #endif
 
+#include "exported/SDL_RWopsPhysicsFS.hpp"
 #include "exported/Window.hpp"
 
 namespace csaru {
@@ -76,9 +77,12 @@ bool Window::Init (const char * title, uint32_t width, uint32_t height) {
 		return false;
 	}
 
-	// Set the clear color to some arbitrary "see this color? you may
-	// want to change it, this is the default" color.
-	SDL_SetRenderDrawColor(m_renderer, 0x34, 0xE3, 0xFF, 0xFF);
+	// set the clear color to some arbitrary, inoffensive default
+	SDL_SetRenderDrawColor(m_renderer, 0x20, 0x20, 0x20, 0xFF);
+
+	if (!SetupDebugFont("/home/chris/anet-id_rsa.pub")) {
+		return false;
+	}
 
 	m_areaWidth  = width;
 	m_areaHeight = height;
@@ -88,6 +92,15 @@ bool Window::Init (const char * title, uint32_t width, uint32_t height) {
 //======================================================================
 void Window::Render () {
 	SDL_RenderPresent(m_renderer);
+}
+
+//======================================================================
+bool Window::SetupDebugFont (const char * path) {
+	SDL_RWops * rwOps = AllocRwOpsPhysFs(path, 'r');
+	if (rwOps)
+		SDL_RWclose(rwOps);
+
+	return true;
 }
 
 } // namespace xapp

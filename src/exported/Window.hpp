@@ -3,7 +3,7 @@
 #include <stdint.h>
 
 #ifdef WIN32
-#	include <SDL.h>
+#	include <SDL.h> // SDL_Event couldn't be forward-declared.
 #else
 #	include <SDL2/SDL.h>
 #endif
@@ -17,6 +17,8 @@ private:
 	uint32_t       m_areaHeight = 0;
 	SDL_Window *   m_window     = nullptr;
 	SDL_Renderer * m_renderer   = nullptr;
+
+	bool SetupDebugFont (const char * path);
 
 public:
 	virtual ~Window ();
