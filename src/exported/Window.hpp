@@ -19,8 +19,9 @@ namespace csaru {
 namespace xapp {
 
 struct DebugText {
-	SDL_Surface * surface         = nullptr;
+	SDL_Texture * texture         = nullptr;
 	uint32_t      framesRemaining = 0;
+	SDL_Rect      textureRect     = {0, 0, 0, 0};
 	std::string   text;
 };
 

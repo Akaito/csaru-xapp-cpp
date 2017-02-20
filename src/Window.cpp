@@ -28,11 +28,24 @@ void Window::DebugPrint (const char * message) {
 		return;
 
 	DebugText line;
-	line.framesRemaining = 60 * 3;
-	line.text    = message;
-	line.surface = TTF_RenderText_Solid(m_debugFont, line.text.c_str(), SDL_Color{0xFF, 0x00, 0xFF, 0xFF});
-	if (!line.surface) {
+	line.framesRemaining = 60 * 2;
+	line.text            = message;
+
+	SDL_Surface * textSurface = TTF_RenderText_Solid(m_debugFont, line.text.c_str(), SDL_Color{0xFF, 0x00, 0xFF, 0xFF});
+	if (!textSurface) {
 		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to render debug text {%s} to SDL surface.  %s\n", message, TTF_GetError());
+		return;
+	}
+	line.texture = SDL_CreateTextureFromSurface(m_renderer, textSurface);
+	SDL_FreeSurface(textSurface);
+	if (!line.texture) {
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to converte debug text {%s} surface to texture.  %s\n", message, SDL_GetError());
+		return;
+	}
+	uint32_t format = 0; // don't actually care about this
+	int      access = 0; // or this
+	if (SDL_QueryTexture(line.texture, &format, &access, &line.textureRect.w, &line.textureRect.h)) {
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to get debug text {%s} texture dimensions.  %s\n", message, SDL_GetError());
 		return;
 	}
 
@@ -41,6 +54,10 @@ void Window::DebugPrint (const char * message) {
 
 //======================================================================
 void Window::Destroy () {
+	for (auto && message : m_debugMessages)
+		SDL_DestroyTexture(message.texture);
+	m_debugMessages.clear();
+
 	if (m_renderer)
 		SDL_DestroyRenderer(m_renderer);
 	if (m_window)
@@ -103,31 +120,27 @@ bool Window::Init (const char * title, uint32_t width, uint32_t height) {
 void Window::Render () {
 	// render debug text
 	{
-		SDL_Surface * windowSurface = SDL_GetWindowSurface(m_window);
-		SDL_Rect      windowRect;
-		SDL_GetClipRect(windowSurface, &windowRect);
+		int yOffset = 0;
 		for (auto && message : m_debugMessages) {
-			SDL_BlitSurface(message.surface, nullptr, windowSurface, nullptr);
-			SDL_Rect textRect;
-			SDL_GetClipRect(message.surface, &textRect);
-			windowRect.y += textRect.y;
+			SDL_Rect destRect = message.textureRect;
+			destRect.y += yOffset;
+			SDL_RenderCopy(m_renderer, message.texture, nullptr, &destRect);
+
+			yOffset += message.textureRect.h;
 			--message.framesRemaining;
-			SDL_Log("Drew {%s}.\n", message.text.c_str());
 		}
 
 		// delete any debug text that's out of time
 		for (int32_t i = m_debugMessages.size() - 1; i >= 0; --i) {
 			auto && message = m_debugMessages[i];
 			if (message.framesRemaining <= 0) {
-				SDL_FreeSurface(message.surface);
+				SDL_DestroyTexture(message.texture);
 				m_debugMessages.erase(m_debugMessages.begin() + i);
 			}
 		}
 	}
 
-	// TODO : Switch to using SDL_Texture from SDL_Surface for everything.
-	SDL_UpdateWindowSurface(m_window);
-	//SDL_RenderPresent(m_renderer);
+	SDL_RenderPresent(m_renderer);
 }
 
 //======================================================================
