@@ -23,6 +23,20 @@ void Window::Clear () {
 //======================================================================
 void Window::DebugPrint (const char * message) {
 	SDL_Log(message);
+
+	if (!m_debugFont)
+		return;
+
+	DebugText line;
+	line.framesRemaining = 60 * 3;
+	line.text    = message;
+	line.surface = TTF_RenderText_Solid(m_debugFont, line.text.c_str(), SDL_Color{0xFF, 0x00, 0xFF, 0xFF});
+	if (!line.surface) {
+		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to render debug text {%s} to SDL surface.  %s\n", message, TTF_GetError());
+		return;
+	}
+
+	m_debugMessages.push_back(std::move(line));
 }
 
 //======================================================================
@@ -80,10 +94,6 @@ bool Window::Init (const char * title, uint32_t width, uint32_t height) {
 	// set the clear color to some arbitrary, inoffensive default
 	SDL_SetRenderDrawColor(m_renderer, 0x20, 0x20, 0x20, 0xFF);
 
-	if (!SetupDebugFont("/home/chris/anet-id_rsa.pub")) {
-		return false;
-	}
-
 	m_areaWidth  = width;
 	m_areaHeight = height;
 	return true;
@@ -91,16 +101,38 @@ bool Window::Init (const char * title, uint32_t width, uint32_t height) {
 
 //======================================================================
 void Window::Render () {
-	SDL_RenderPresent(m_renderer);
+	// render debug text
+	{
+		SDL_Surface * windowSurface = SDL_GetWindowSurface(m_window);
+		SDL_Rect      windowRect;
+		SDL_GetClipRect(windowSurface, &windowRect);
+		for (auto && message : m_debugMessages) {
+			SDL_BlitSurface(message.surface, nullptr, windowSurface, nullptr);
+			SDL_Rect textRect;
+			SDL_GetClipRect(message.surface, &textRect);
+			windowRect.y += textRect.y;
+			--message.framesRemaining;
+			SDL_Log("Drew {%s}.\n", message.text.c_str());
+		}
+
+		// delete any debug text that's out of time
+		for (int32_t i = m_debugMessages.size() - 1; i >= 0; --i) {
+			auto && message = m_debugMessages[i];
+			if (message.framesRemaining <= 0) {
+				SDL_FreeSurface(message.surface);
+				m_debugMessages.erase(m_debugMessages.begin() + i);
+			}
+		}
+	}
+
+	// TODO : Switch to using SDL_Texture from SDL_Surface for everything.
+	SDL_UpdateWindowSurface(m_window);
+	//SDL_RenderPresent(m_renderer);
 }
 
 //======================================================================
-bool Window::SetupDebugFont (const char * path) {
-	SDL_RWops * rwOps = AllocRwOpsPhysFs(path, 'r');
-	if (rwOps)
-		SDL_RWclose(rwOps);
-
-	return true;
+void Window::SetDebugFont (TTF_Font * font) {
+	m_debugFont = font;
 }
 
 } // namespace xapp

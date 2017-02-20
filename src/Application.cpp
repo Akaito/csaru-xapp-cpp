@@ -27,6 +27,7 @@ Application::~Application () {
 //======================================================================
 void Application::AddWindow (Window * window) {
 	m_windows.push_back(window);
+	window->SetDebugFont(m_debugFont);
 }
 
 //======================================================================
@@ -125,6 +126,9 @@ void Application::SetFont (const char * key, TTF_Font * font) {
 //======================================================================
 void Application::SetDebugFont (const char * key) {
 	m_debugFont = m_fonts.at(key);
+	for (auto && window : m_windows) {
+		window->SetDebugFont(m_debugFont);
+	}
 }
 
 } // namespace xapp
