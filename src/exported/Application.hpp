@@ -13,6 +13,7 @@ class Window;
 class Application {
 private:
 	std::vector<Window *> m_windows;
+	bool                  m_isQuitting = false;
 
 public:
 	virtual ~Application ();
@@ -20,9 +21,11 @@ public:
 	bool Init ();
 	void Close ();
 
-	void AddWindow (Window * window);
+	void PollEvents ();
 
+	void AddWindow (Window * window);
 	bool HasOpenWindows () { return !m_windows.empty(); }
+	bool IsQuitting ()     { return m_isQuitting; }
 };
 
 } // namespace xapp

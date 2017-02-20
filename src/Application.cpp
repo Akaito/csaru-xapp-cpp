@@ -42,6 +42,17 @@ bool Application::Init () {
 	return true;
 }
 
+//======================================================================
+void Application::PollEvents () {
+	SDL_Event e;
+	while (SDL_PollEvent(&e)) {
+		if (e.type == SDL_QUIT || e.type == SDL_APP_TERMINATING) {
+			m_isQuitting = true;
+			break;
+		}
+	}
+}
+
 } // namespace xapp
 } // namespace csaru
 
