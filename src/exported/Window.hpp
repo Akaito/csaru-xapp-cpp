@@ -18,16 +18,15 @@ typedef _TTF_Font TTF_Font;
 namespace csaru {
 namespace xapp {
 
-struct DebugText {
-	SDL_Texture * texture         = nullptr;
-	uint32_t      framesRemaining = 0;
-	SDL_Rect      textureRect     = {0, 0, 0, 0};
-	std::string   text;
-};
-
-
 class Window {
 private:
+	struct DebugText {
+		SDL_Texture * texture         = nullptr;
+		uint32_t      framesRemaining = 0;
+		SDL_Rect      textureRect     = {0, 0, 0, 0};
+		std::string   text;
+	};
+
 	uint32_t               m_areaWidth  = 0;
 	uint32_t               m_areaHeight = 0;
 	SDL_Window *           m_window     = nullptr;
