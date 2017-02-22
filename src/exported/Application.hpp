@@ -3,9 +3,11 @@
 #include <unordered_map>
 #include <vector>
 
-// SDL_ttf font object forward declare
-struct _TTF_Font;
-typedef _TTF_Font TTF_Font;
+#ifdef WIN32
+#	include <SDL.h> // SDL_Event couldn't be reasonably forward-declared.
+#else
+#	include <SDL2/SDL.h>
+#endif
 
 namespace csaru {
 namespace xapp {
