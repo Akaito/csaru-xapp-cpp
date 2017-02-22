@@ -37,12 +37,12 @@ private:
 public:
 	virtual ~Window ();
 
-	bool Init (const char * title, uint32_t width, uint32_t height);
-	void Destroy ();
+	virtual bool Init (const char * title, uint32_t width, uint32_t height);
+	virtual void Destroy ();
 
-	void HandleEvent (const SDL_Event & e);
-	void Clear ();
-	void Render ();
+	virtual void HandleEvent (const SDL_Event & e);
+	virtual void Clear ();
+	virtual void Render ();
 
 	void SetDebugFont (TTF_Font * font);
 	void DebugPrint (const char * message);
