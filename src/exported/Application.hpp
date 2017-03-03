@@ -17,21 +17,23 @@ class Window;
 
 
 class Application {
-private:
+protected:
 	std::vector<Window *>                        m_windows;
 	std::unordered_map<const char *, TTF_Font *> m_fonts; // Could be better placed.  Works fine for now.
 	bool                                         m_isQuitting = false;
 	TTF_Font *                                   m_debugFont  = nullptr;
 
-	void HandleWindowEvent (const SDL_Event & e);
+	bool TryHandleWindowEvent (const SDL_Event & e);
 
 public:
 	virtual ~Application ();
 
-	bool Init (int argc, const char * const * argv);
-	void Close ();
+	virtual bool Init (int argc, const char * const * argv); // Call this Init from your own first!
+	virtual void Close (); // Call this one *after* yours.
 
-	void PollEvents ();
+	// Suggest copy-pasting this one's contents into yours to start.
+	// Don't call this from yours!
+	virtual void PollEvents ();
 
 	void AddWindow (Window * window);
 	bool HasOpenWindows () { return !m_windows.empty(); }
@@ -39,6 +41,10 @@ public:
 
 	void SetFont (const char * key, TTF_Font * font); // Application Close destroys these.  Setting to nullptr doesn't.
 	void SetDebugFont (const char * key);
+
+	// Helpers for simple applications.
+	void ClearWindows ();
+	void RenderWindows ();
 };
 
 } // namespace xapp

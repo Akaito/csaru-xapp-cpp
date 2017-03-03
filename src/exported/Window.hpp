@@ -19,7 +19,7 @@ namespace csaru {
 namespace xapp {
 
 class Window {
-private:
+protected:
 	struct DebugText {
 		SDL_Texture * texture         = nullptr;
 		uint32_t      framesRemaining = 0;
