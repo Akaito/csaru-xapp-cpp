@@ -61,11 +61,14 @@ void Application::Close () {
 bool Application::TryHandleWindowEvent (const SDL_Event & e) {
 	uint32_t eventWindowId = 0;
 	switch (e.type) {
-		case SDL_KEYDOWN:         eventWindowId = e.key.windowID;    break;
+		case SDL_KEYDOWN:         // fall-through
 		case SDL_KEYUP:           eventWindowId = e.key.windowID;    break;
-		case SDL_MOUSEBUTTONUP:   eventWindowId = e.button.windowID; break;
+		case SDL_MOUSEBUTTONUP:   // fall-through
 		case SDL_MOUSEBUTTONDOWN: eventWindowId = e.button.windowID; break;
 		case SDL_MOUSEMOTION:     eventWindowId = e.motion.windowID; break;
+		case SDL_MOUSEWHEEL:      eventWindowId = e.wheel.windowID;  break;
+		case SDL_TEXTEDITING:     eventWindowId = e.edit.windowID;   break;
+		case SDL_TEXTINPUT:       eventWindowId = e.text.windowID;   break;
 		case SDL_WINDOWEVENT:     eventWindowId = e.window.windowID; break;
 		default: return false;
 	}
