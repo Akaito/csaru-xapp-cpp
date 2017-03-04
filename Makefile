@@ -11,7 +11,7 @@ PROJ_VERSION = 0.1
 
 # CSaruEnv Makefiles append to variables like LDLIBS, so we can freely set them
 # up here.
-LDLIBS = -l SDL2 SDL2_ttf
+LDLIBS = -l SDL2 SDL2_ttf SDL2_opengl
 
 include ../../makefiles/Makefile-staticlib
 

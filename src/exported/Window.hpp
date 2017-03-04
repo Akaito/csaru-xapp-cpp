@@ -30,7 +30,7 @@ protected:
 	uint32_t               m_areaWidth  = 0;
 	uint32_t               m_areaHeight = 0;
 	SDL_Window *           m_window     = nullptr;
-	SDL_Renderer *         m_renderer   = nullptr;
+	SDL_Renderer *         m_renderer   = nullptr; // TODO : Move to new child class.
 	TTF_Font *             m_debugFont  = nullptr;
 	std::vector<DebugText> m_debugMessages;
 
