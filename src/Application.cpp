@@ -10,7 +10,7 @@
 
 #include <physfs.h>
 
-#include <csaru-core-cpp/csaru-core-cpp.hpp> // unused()
+#include <csaru-core/everything.hpp> // unused()
 
 #include "exported/Application.hpp"
 #include "exported/SDL_RWopsPhysicsFS.hpp"
