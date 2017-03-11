@@ -4,7 +4,7 @@
 #	include <SDL2/SDL_ttf.h>
 #endif
 
-#include "exported/SDL_RWopsPhysicsFS.hpp"
+#include <csaru-loaders/everything.hpp>
 #include "exported/Window.hpp"
 
 namespace csaru {

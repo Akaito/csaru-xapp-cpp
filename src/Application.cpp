@@ -11,9 +11,9 @@
 #include <physfs.h>
 
 #include <csaru-core/everything.hpp> // unused()
+#include <csaru-loaders/everything.hpp>
 
 #include "exported/Application.hpp"
-#include "exported/SDL_RWopsPhysicsFS.hpp"
 #include "exported/Window.hpp"
 
 namespace csaru {

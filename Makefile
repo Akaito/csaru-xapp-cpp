@@ -6,7 +6,7 @@
 
 # Special variable used to build ld (linker) -l and -L args.
 # Space-separated list of CSaruEnv modules.
-CSARU_DEPENDS = csaru-core-cpp
+CSARU_DEPENDS = csaru-core-cpp csaru-loaders
 PROJ_VERSION = 0.1
 
 # CSaruEnv Makefiles append to variables like LDLIBS, so we can freely set them
