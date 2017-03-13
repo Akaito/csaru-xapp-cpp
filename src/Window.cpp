@@ -7,6 +7,8 @@
 #include <csaru-loaders/everything.hpp>
 #include "exported/Window.hpp"
 
+extern int SDL_LOG_CATEGORY_CSARU_XAPP;
+
 namespace csaru {
 namespace xapp {
 
@@ -22,7 +24,7 @@ void Window::Clear () {
 
 //======================================================================
 void Window::DebugPrint (const char * message) {
-	SDL_Log(message);
+	SDL_LogInfo(SDL_LOG_CATEGORY_CSARU_XAPP, "%s", message);
 
 	if (!m_debugFont)
 		return;
@@ -33,19 +35,19 @@ void Window::DebugPrint (const char * message) {
 
 	SDL_Surface * textSurface = TTF_RenderText_Solid(m_debugFont, line.text.c_str(), SDL_Color{0xFF, 0x00, 0xFF, 0xFF});
 	if (!textSurface) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to render debug text {%s} to SDL surface.  %s\n", message, TTF_GetError());
+		SDL_LogError(SDL_LOG_CATEGORY_CSARU_XAPP, "Failed to render debug text {%s} to SDL surface.  %s\n", message, TTF_GetError());
 		return;
 	}
 	line.texture = SDL_CreateTextureFromSurface(m_renderer, textSurface);
 	SDL_FreeSurface(textSurface);
 	if (!line.texture) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to converte debug text {%s} surface to texture.  %s\n", message, SDL_GetError());
+		SDL_LogError(SDL_LOG_CATEGORY_CSARU_XAPP, "Failed to converte debug text {%s} surface to texture.  %s\n", message, SDL_GetError());
 		return;
 	}
 	uint32_t format = 0; // don't actually care about this
 	int      access = 0; // or this
 	if (SDL_QueryTexture(line.texture, &format, &access, &line.textureRect.w, &line.textureRect.h)) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to get debug text {%s} texture dimensions.  %s\n", message, SDL_GetError());
+		SDL_LogError(SDL_LOG_CATEGORY_CSARU_XAPP, "Failed to get debug text {%s} texture dimensions.  %s\n", message, SDL_GetError());
 		return;
 	}
 
@@ -58,13 +60,15 @@ void Window::Destroy () {
 		SDL_DestroyTexture(message.texture);
 	m_debugMessages.clear();
 
-	if (m_renderer)
+	if (m_renderer) {
 		SDL_DestroyRenderer(m_renderer);
-	if (m_window)
+		m_renderer = nullptr;
+	}
+	if (m_window) {
 		SDL_DestroyWindow(m_window);
+		m_window = nullptr;
+	}
 
-	m_renderer   = nullptr;
-	m_window     = nullptr;
 	m_areaWidth  = 0;
 	m_areaHeight = 0;
 }
@@ -93,7 +97,7 @@ bool Window::Init (const char * title, uint32_t width, uint32_t height) {
 		SDL_WINDOW_SHOWN
 	);
 	if (!m_window) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL failed to create a window.  %s\n", SDL_GetError());
+		SDL_LogError(SDL_LOG_CATEGORY_CSARU_XAPP, "SDL failed to create a window.  %s\n", SDL_GetError());
 		return false;
 	}
 
@@ -104,7 +108,7 @@ bool Window::Init (const char * title, uint32_t width, uint32_t height) {
 		SDL_RENDERER_ACCELERATED
 	);
 	if (!m_renderer) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL failed to create a renderer.  %s\n", SDL_GetError());
+		SDL_LogError(SDL_LOG_CATEGORY_CSARU_XAPP, "SDL failed to create a renderer.  %s\n", SDL_GetError());
 		return false;
 	}
 

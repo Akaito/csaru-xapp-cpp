@@ -80,7 +80,7 @@ bool Application::TryHandleWindowEvent (const SDL_Event & e) {
 		window->HandleEvent(e);
 		return true;
 	}
-	//SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_WINDOWEVENT windowID {%u} unmatched in Application.", e.window.windowID);
+	//SDL_LogError(SDL_LOG_CATEGORY_CSARU_XAPP, "SDL_WINDOWEVENT windowID {%u} unmatched in Application.", e.window.windowID);
 	return false;
 }
 
@@ -138,6 +138,9 @@ void Application::RenderWindows () {
 
 //======================================================================
 void Application::SetFont (const char * key, TTF_Font * font) {
+	SDL_assert(key);
+	SDL_assert(font);
+
 	// If setting to null, don't free the font.  Assume user is doing that.
 	if (!font) {
 		if (m_debugFont == m_fonts.at(key))

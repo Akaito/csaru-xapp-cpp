@@ -6,6 +6,8 @@
 #	include <SDL2/SDL_opengl.h>
 #endif
 
+extern int SDL_LOG_CATEGORY_CSARU_XAPP;
+
 namespace csaru {
 namespace xapp {
 
@@ -29,13 +31,14 @@ void WindowOpenGl::Destroy () {
 bool WindowOpenGl::Init (const char * title, uint32_t width, uint32_t height) {
 	Destroy();
 
+	// Must set attributes before window creation.
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-	SDL_DisplayMode currentDisplayMode;
-	SDL_GetCurrentDisplayMode(0, &currentDisplayMode);
+	//SDL_DisplayMode currentDisplayMode;
+	//SDL_GetCurrentDisplayMode(0, &currentDisplayMode);
 
 	// create window
 	m_window = SDL_CreateWindow(
@@ -47,13 +50,13 @@ bool WindowOpenGl::Init (const char * title, uint32_t width, uint32_t height) {
 		SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
 	);
 	if (!m_window) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL failed to create a window.  %s\n", SDL_GetError());
+		SDL_LogError(SDL_LOG_CATEGORY_CSARU_XAPP, "SDL failed to create a window.  %s\n", SDL_GetError());
 		return false;
 	}
 
 	m_glContext = SDL_GL_CreateContext(m_window);
 	if (!m_glContext) {
-		SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL failed to create a GL context.  %s\n", SDL_GetError());
+		SDL_LogError(SDL_LOG_CATEGORY_CSARU_XAPP, "SDL failed to create a GL context.  %s\n", SDL_GetError());
 		return false;
 	}
 
