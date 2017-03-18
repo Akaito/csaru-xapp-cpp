@@ -5,7 +5,6 @@
 extern int SDL_LOG_CATEGORY_CSARU_XAPP;
 
 #include "Application.hpp"
-#include "SDL_RWopsPhysicsFS.hpp"
 #include "Window.hpp"
 #include "WindowOpenGl.hpp"
 
