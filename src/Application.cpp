@@ -16,6 +16,8 @@
 #include "exported/Application.hpp"
 #include "exported/Window.hpp"
 
+extern int SDL_LOG_CATEGORY_CSARU_XAPP;
+
 namespace csaru {
 namespace xapp {
 
