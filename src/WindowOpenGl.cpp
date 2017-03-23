@@ -24,6 +24,9 @@ void WindowOpenGl::Clear () {
 
 //======================================================================
 void WindowOpenGl::Destroy () {
+	if (m_glContext)
+		SDL_GL_DeleteContext(m_glContext);
+	m_glContext = nullptr;
 	csaru::xapp::Window::Destroy();
 }
 
