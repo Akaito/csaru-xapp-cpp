@@ -90,6 +90,7 @@ bool Application::TryHandleWindowEvent (const SDL_Event & e) {
 bool Application::Init (int argc, const char * const * argv) {
 	unused(argc);
 
+	// SDL_Init here eventually accesses uninitialized memory down in libxcb.
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		std::fprintf(stderr, "SDL failed to initialize.  %s\n", SDL_GetError());
 		return false;
