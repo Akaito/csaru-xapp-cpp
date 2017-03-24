@@ -41,7 +41,7 @@ void Application::ClearWindows () {
 
 //======================================================================
 void Application::Close () {
-	for (auto && window : m_windows) {
+	for (Window * window : m_windows) {
 		window->Destroy();
 	}
 	m_windows.clear();
