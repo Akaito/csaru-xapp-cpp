@@ -1,17 +1,24 @@
+# Vim
 *~
+*.swo
 *.swp
-Session.vim
-__pycache__
+*.vim
 
-docs
-
+# Visual Studio
 Debug
 Release
-*vcxproj*.user
+*.sdf
+.vs
 
+# Build artifacts
+*.a
 *.d
 *.o
-*.a
 
+# Python
+__pycache__
+*.pyc
+
+docs
 src/tags
 
