@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#ifdef WIN32
+#ifdef _WIN32
 #	include <SDL.h>
 #	include <SDL_ttf.h>
 #else

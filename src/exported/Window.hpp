@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#ifdef WIN32
+#ifdef _WIN32
 #	include <SDL.h> // SDL_Event couldn't be reasonably forward-declared.
 #else
 #	include <SDL2/SDL.h>
